@@ -1,14 +1,20 @@
 #ifndef DOGMGRAPHIC_H_INCLUDED
 #define DOGMGRAPHIC_H_INCLUDED
 
+
 #include <avr/io.h>
-#include <inttypes.h>
-#include <string.h>
-#include <util/delay.h>
+#include <stdbool.h>
 #include <avr/pgmspace.h>
+#include <avr/interrupt.h>
+#include <util/delay.h>
+#include <errno.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <stdio.h>
+
 #include "dogDisplayHardware.h"
 #include "font.h"
-#include "spi_driver.h"
+#include "spiDevice.h"
 
 /*****************************************************************************
  * Public Functions
@@ -16,7 +22,7 @@
 
 //initializes the display in standard settings
 //for DOGS, DOGM, DOGL and DOGXL
-void lcd_init(SPI_Master_t *spiLCD);
+void lcd_init();
 
 //write data word or command to the LCD
 void lcd_data     (uint8_t data);

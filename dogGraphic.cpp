@@ -50,7 +50,8 @@
 uint8_t lcd_current_page = 0;
 uint8_t lcd_current_column = 0;
 
-SPI_Master_t *_spiLCD;
+
+spiDevice  *p_spiDevice;
 
 
 /******************************************************************************
@@ -120,7 +121,7 @@ void lcd_data(uint8_t data) {
   //cli();
   LCD_SELECT();
   LCD_DRAM();
-  SPI_MasterTransceiveByte(_spiLCD,data);
+  p_spiDevice->transceiveByte(data);
   //spi_write(data);
   LCD_UNSELECT();
   //sei();
@@ -135,7 +136,7 @@ void lcd_command(uint8_t cmd) {
   //cli();
   LCD_SELECT();
   LCD_CMD();
-  SPI_MasterTransceiveByte(_spiLCD,cmd);
+  p_spiDevice->transceiveByte(cmd);
   //spi_write(cmd);
   LCD_UNSELECT();
   //sei();
@@ -289,8 +290,11 @@ uint8_t grenze;
   * Suitable for all DOGS, DOGM, DOGL and DOGXL displays
   * in both bottom or top-view orientation.
   */
-void lcd_init(SPI_Master_t *spiLCD) {
-  _spiLCD = spiLCD;
+void lcd_init()
+{
+  static volatile spiDevice _spiLCD(&LCD_SPI,&LCD_SPI_PORT,&LCD_CS_PORT,LCD_CS_PIN,false,SPI_MODE_1_gc,LCD_SPI_INTLVL,LCD_SPI_CLK2,LCD_SPI_PRESCALER);
+
+  p_spiDevice = &_spiLCD;
 	LCD_SET_PIN_DIRECTIONS();  //set outputs
  	//Spi_Init();			// SPI Init
 
