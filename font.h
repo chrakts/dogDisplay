@@ -120,7 +120,7 @@ PGM_P   font_get_char_position (FONT_P font, char character);
 //style is one or more of the defines for different font sizes & styles shown below
 //and str and c are the string or the character to be displayed
 
-uint16_t lcd_put_string       (FONT_P font, uint8_t style, char* str);
+uint16_t lcd_put_string       (FONT_P font, uint8_t style, const char* str);
 uint16_t lcd_put_string_length(FONT_P font, uint8_t style, char* str,      uint8_t length);
 uint16_t lcd_put_string_P     (FONT_P font, uint8_t style, PGM_P str);
 uint8_t  lcd_put_char         (FONT_P font, uint8_t style, char c);

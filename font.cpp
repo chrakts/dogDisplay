@@ -267,7 +267,7 @@ uint16_t lcd_put_string_P(FONT_P font, uint8_t style, PGM_P str) {
 /******************************************************************************
  * Outputs a string on the display, using the given font and style
  */
-uint16_t lcd_put_string(FONT_P font, uint8_t style, char* str) {
+uint16_t lcd_put_string(FONT_P font, uint8_t style, const char* str) {
   unsigned char t;
   uint16_t length = 0;
   while((t = *str++))
