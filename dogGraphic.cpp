@@ -171,9 +171,45 @@ void lcd_draw_image_P(const char *progmem_image PROGMEM, uint8_t pages, uint8_t 
     }
   }
 
+//=============================================================================
+//Puts raw data from Flash to the Display
+//=============================================================================
+/******************************************************************************
+ * This function draws a bitmap from the current position on the screen.
+ * Parameters:
+ * progmem_image - prog_uint8_t array of columns aka the bitmap image
+ * pages         - height of image in pages
+ * columns       - width of image in pixels (or columns)
+ * style         - Bit2: sets inverse mode
+ */
+void lcd_draw_compact_image_P(const char *progmem_image PROGMEM, uint8_t pages, uint8_t columns, uint8_t style) {
+	uint8_t i,j = 0,tmp,toRepeat=0;
+  uint8_t inv = (style & INVERT_BIT);
+	while(j<pages && (lcd_get_position_page() < LCD_RAM_PAGES)) {
+		for (i=0; i<columns && (lcd_get_position_column() < LCD_WIDTH); i++)
+    {
+      if( toRepeat == 0 )
+      {
+        tmp = pgm_read_byte(progmem_image++);
+        if( (tmp == 0) | (tmp == 255) )
+          toRepeat = pgm_read_byte(progmem_image++);
+        else
+          toRepeat = 0;
+      }
+      else
+        toRepeat--;
+			if(!inv)
+				lcd_data(tmp);
+			else
+				lcd_data(~tmp);
+    }
+    if(++j != pages && lcd_get_position_column() != 0)
+      lcd_move_xy(1,-columns);
+    }
+  }
 
 /******************************************************************************
- * This function draws a bitmap at any xy-position on the screen.
+ * This function draws a compacted bitmap at any xy-position on the screen.
  * Be aware that some pixels are deleted due to memory organization!
  * Parameters:
  * progmem_image - prog_uint8_t array of columns aka the bitmap image
